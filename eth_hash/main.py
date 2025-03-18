@@ -11,8 +11,6 @@ from .abc import (
 class Keccak256:
     def __init__(self, backend: BackendAPI) -> None:
         self._backend = backend
-        self.hasher = self._hasher_first_run
-        self.preimage = self._preimage_first_run
 
     def _hasher_first_run(self, in_data: Union[bytearray, bytes]) -> bytes:
         """
@@ -39,6 +37,9 @@ class Keccak256:
         result = self._backend.preimage(in_data)
         self.preimage = self._backend.preimage
         return result
+
+    hasher = _hasher_first_run
+    preimage = _preimage_first_run
 
     def __call__(self, preimage: Union[bytearray, bytes]) -> bytes:
         if not isinstance(preimage, (bytearray, bytes)):
